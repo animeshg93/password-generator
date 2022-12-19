@@ -1,12 +1,9 @@
 from database import usersTable
-
-id = 100
+import random
 
 def addUser():
-	global id
-
+	id = random.randint(1,10000)
 	name = input('Enter your name, player: ')
 	user = (name, id)
-	id += 1
 	return user
 	
