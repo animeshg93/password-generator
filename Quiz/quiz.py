@@ -1,5 +1,7 @@
 from database import questionsTable, usersTable
+from addUser import addUser
 
+user = addUser()
 score = 0
 
 def creatChoiceDict(list):
@@ -17,10 +19,10 @@ def getAnswer(choiceDict, correctAnswer):
 
 	if choiceDict[answer.lower()] == correctAnswer:
 		print("You are correct!\n")
-		return True
+		return (True, choiceDict[answer.lower()])
 	else:
 		print(f"You are incorrect. The correct answer is {correctAnswer}\n")
-		return False
+		return (False, choiceDict[answer.lower()])
 
 
 def printScore():
@@ -39,17 +41,27 @@ def adjustScore(answer):
 		score = score-10
 	printScore()
 
+def updateUserScore(questionObject, answer):
+	usersTable.put_item(
+		Item={
+        'Name': user[0],
+        'QuestionID': questionObject['ID'],
+        'UserID': str(user[1]),
+        'IsCorrect': answer[0],
+        'Answer': answer[1]
+    })
+
 
 def questions():
-	for i in range(1,4):
-		questionID = {'QUESTION': 'QUESTION#','ID': '00'+ str(i)}
-
+	for i in range(100,103):
+		questionID = {'QUESTION': 'QUESTION#','ID': str(i)}
 		questionObject = questionsTable.get_item(Key=questionID)['Item']
 		question = questionObject['Question']
 		
 		print(question+"\n")
 		choiceDict = creatChoiceDict(questionObject['Choices'])
 		answer = getAnswer(choiceDict, questionObject['CorrectAnswer'])
-		adjustScore(answer)
+		adjustScore(answer[0])
+		updateUserScore(questionObject, answer)
 
 questions()
