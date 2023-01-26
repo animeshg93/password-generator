@@ -39,7 +39,7 @@ def gameLogic(word, guess, freqMap, guessed_letters):
             guessed_letters.append(letter)
 
     if guess < len(HANGMAN_PICS) - 1:
-        print(f"Congratulations, you guessed the right word. The word was \"{word}\"")
+        print(f"Congratulations, you guessed the correct word. The word was \"{word}\"")
     else:
         print(HANGMAN_PICS[guess])
         print(f"Sorry, the correct word was {word}")
